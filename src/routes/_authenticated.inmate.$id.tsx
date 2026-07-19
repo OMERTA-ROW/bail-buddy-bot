@@ -86,12 +86,10 @@ function InmateDetail() {
 
   async function simulate(type: "bond_set" | "bond_posted" | "released") {
     if (!inmate) return;
-    const patches: Record<string, Partial<Inmate>> = {
-      bond_set: { status: "bond_set", bond_amount_cents: 250000 },
-      bond_posted: { status: "bond_posted" },
-      released: { status: "released" },
-    };
-    const patch = patches[type];
+    const patch: { status: "bond_set" | "bond_posted" | "released"; bond_amount_cents?: number } =
+      type === "bond_set"
+        ? { status: "bond_set", bond_amount_cents: 250000 }
+        : { status: type };
     const { error: uerr } = await supabase.from("tracked_inmates")
       .update({ ...patch, last_checked_at: new Date().toISOString() })
       .eq("id", inmate.id);
