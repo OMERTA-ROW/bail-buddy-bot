@@ -14,7 +14,185 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bondsmen: {
+        Row: {
+          agency_name: string
+          bio: string | null
+          contact_name: string
+          counties_served: string[]
+          created_at: string
+          email: string
+          hours_247: boolean
+          id: string
+          license_number: string
+          license_state: string
+          phone: string
+          premium_rate_pct: number
+          states_served: string[]
+          updated_at: string
+          user_id: string | null
+          verified: boolean
+        }
+        Insert: {
+          agency_name: string
+          bio?: string | null
+          contact_name: string
+          counties_served?: string[]
+          created_at?: string
+          email: string
+          hours_247?: boolean
+          id?: string
+          license_number: string
+          license_state: string
+          phone: string
+          premium_rate_pct?: number
+          states_served?: string[]
+          updated_at?: string
+          user_id?: string | null
+          verified?: boolean
+        }
+        Update: {
+          agency_name?: string
+          bio?: string | null
+          contact_name?: string
+          counties_served?: string[]
+          created_at?: string
+          email?: string
+          hours_247?: boolean
+          id?: string
+          license_number?: string
+          license_state?: string
+          phone?: string
+          premium_rate_pct?: number
+          states_served?: string[]
+          updated_at?: string
+          user_id?: string | null
+          verified?: boolean
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          notify_email: boolean
+          notify_sms: boolean
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          notify_email?: boolean
+          notify_sms?: boolean
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          notify_email?: boolean
+          notify_sms?: boolean
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      status_events: {
+        Row: {
+          bond_amount_cents: number | null
+          created_at: string
+          description: string | null
+          event_type: string
+          id: string
+          inmate_id: string
+        }
+        Insert: {
+          bond_amount_cents?: number | null
+          created_at?: string
+          description?: string | null
+          event_type: string
+          id?: string
+          inmate_id: string
+        }
+        Update: {
+          bond_amount_cents?: number | null
+          created_at?: string
+          description?: string | null
+          event_type?: string
+          id?: string
+          inmate_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "status_events_inmate_id_fkey"
+            columns: ["inmate_id"]
+            isOneToOne: false
+            referencedRelation: "tracked_inmates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tracked_inmates: {
+        Row: {
+          auto_refer_bondsman: boolean
+          bond_amount_cents: number | null
+          booking_number: string | null
+          charges: string | null
+          county: string
+          created_at: string
+          date_of_birth: string | null
+          facility_name: string | null
+          full_name: string
+          id: string
+          last_checked_at: string | null
+          notes: string | null
+          state: string
+          status: Database["public"]["Enums"]["inmate_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_refer_bondsman?: boolean
+          bond_amount_cents?: number | null
+          booking_number?: string | null
+          charges?: string | null
+          county: string
+          created_at?: string
+          date_of_birth?: string | null
+          facility_name?: string | null
+          full_name: string
+          id?: string
+          last_checked_at?: string | null
+          notes?: string | null
+          state: string
+          status?: Database["public"]["Enums"]["inmate_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_refer_bondsman?: boolean
+          bond_amount_cents?: number | null
+          booking_number?: string | null
+          charges?: string | null
+          county?: string
+          created_at?: string
+          date_of_birth?: string | null
+          facility_name?: string | null
+          full_name?: string
+          id?: string
+          last_checked_at?: string | null
+          notes?: string | null
+          state?: string
+          status?: Database["public"]["Enums"]["inmate_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +201,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      inmate_status:
+        | "searching"
+        | "in_custody"
+        | "bond_set"
+        | "bond_posted"
+        | "released"
+        | "transferred"
+        | "not_found"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +335,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      inmate_status: [
+        "searching",
+        "in_custody",
+        "bond_set",
+        "bond_posted",
+        "released",
+        "transferred",
+        "not_found",
+      ],
+    },
   },
 } as const
