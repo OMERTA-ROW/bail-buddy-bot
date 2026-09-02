@@ -30,9 +30,17 @@ export function SiteHeader() {
             Bondsmen
           </Link>
           {session ? (
-            <Link to="/dashboard" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
-              Dashboard
-            </Link>
+            <>
+              <Link to="/dashboard" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
+                Dashboard
+              </Link>
+              <Link to="/account" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
+                Funding account
+              </Link>
+              <Link to="/payment-methods" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
+                Payment methods
+              </Link>
+            </>
           ) : null}
         </nav>
         <div className="flex items-center gap-2">
@@ -53,7 +61,7 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Link to="/auth" className="rounded-md px-3 py-1.5 text-sm hover:bg-secondary">
+              <Link to="/auth" search={{ mode: "signin" }} className="rounded-md px-3 py-1.5 text-sm hover:bg-secondary">
                 Sign in
               </Link>
               <Link

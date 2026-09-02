@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 
 export const Route = createFileRoute("/auth")({
   validateSearch: (s: Record<string, unknown>) => ({
-    mode: s.mode === "signup" ? "signup" : "signin",
+    mode: (s.mode === "signup" ? "signup" : "signin") as "signin" | "signup",
   }),
   component: AuthPage,
 });

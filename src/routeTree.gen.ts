@@ -14,7 +14,9 @@ import { Route as BondsmenRouteImport } from './routes/bondsmen'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedPaymentMethodsRouteImport } from './routes/_authenticated.payment-methods'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated.account'
 import { Route as AuthenticatedInmateIdRouteImport } from './routes/_authenticated.inmate.$id'
 
 const JoinBondsmanRoute = JoinBondsmanRouteImport.update({
@@ -41,9 +43,20 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedPaymentMethodsRoute =
+  AuthenticatedPaymentMethodsRouteImport.update({
+    id: '/payment-methods',
+    path: '/payment-methods',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedInmateIdRoute = AuthenticatedInmateIdRouteImport.update({
@@ -57,7 +70,9 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/inmate/$id': typeof AuthenticatedInmateIdRoute
 }
 export interface FileRoutesByTo {
@@ -65,7 +80,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/inmate/$id': typeof AuthenticatedInmateIdRoute
 }
 export interface FileRoutesById {
@@ -75,7 +92,9 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/_authenticated/inmate/$id': typeof AuthenticatedInmateIdRoute
 }
 export interface FileRouteTypes {
@@ -85,7 +104,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/bondsmen'
     | '/join-bondsman'
+    | '/account'
     | '/dashboard'
+    | '/payment-methods'
     | '/inmate/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -93,7 +114,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/bondsmen'
     | '/join-bondsman'
+    | '/account'
     | '/dashboard'
+    | '/payment-methods'
     | '/inmate/$id'
   id:
     | '__root__'
@@ -102,7 +125,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/bondsmen'
     | '/join-bondsman'
+    | '/_authenticated/account'
     | '/_authenticated/dashboard'
+    | '/_authenticated/payment-methods'
     | '/_authenticated/inmate/$id'
   fileRoutesById: FileRoutesById
 }
@@ -151,11 +176,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/payment-methods': {
+      id: '/_authenticated/payment-methods'
+      path: '/payment-methods'
+      fullPath: '/payment-methods'
+      preLoaderRoute: typeof AuthenticatedPaymentMethodsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/inmate/$id': {
@@ -169,12 +208,16 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedPaymentMethodsRoute: typeof AuthenticatedPaymentMethodsRoute
   AuthenticatedInmateIdRoute: typeof AuthenticatedInmateIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedPaymentMethodsRoute: AuthenticatedPaymentMethodsRoute,
   AuthenticatedInmateIdRoute: AuthenticatedInmateIdRoute,
 }
 
@@ -192,3 +235,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
