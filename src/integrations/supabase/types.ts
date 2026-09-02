@@ -440,6 +440,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      contribute_to_pool: {
+        Args: { _amount_cents: number; _note?: string; _pool_id: string }
+        Returns: string
+      }
       is_pool_member: {
         Args: { _pool_id: string; _user_id: string }
         Returns: boolean
@@ -447,6 +451,10 @@ export type Database = {
       is_pool_owner: {
         Args: { _pool_id: string; _user_id: string }
         Returns: boolean
+      }
+      request_disbursement: {
+        Args: { _amount_cents: number; _inmate_id: string }
+        Returns: string
       }
     }
     Enums: {
