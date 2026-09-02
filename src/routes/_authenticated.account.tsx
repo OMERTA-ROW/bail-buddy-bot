@@ -10,6 +10,12 @@ export const Route = createFileRoute("/_authenticated/account")({
   component: AccountPage,
 });
 
+type MemberPatch = {
+  can_draw?: boolean;
+  spend_limit_cents?: number | null;
+  card_fallback_consent?: boolean;
+};
+
 type Pool = {
   id: string;
   name: string;
@@ -131,19 +137,25 @@ function AccountPage() {
   async function addFunds(amount: string, note: string) {
     if (!pool) return;
     const cents = parseDollars(amount);
-    if (!cents) return toast.error("Enter a valid dollar amount");
+    if (!cents) {
+      toast.error("Enter a valid dollar amount");
+      return;
+    }
     const { error } = await supabase.rpc("contribute_to_pool", {
       _pool_id: pool.id,
       _amount_cents: cents,
-      _note: note || null,
+      _note: note || undefined,
     });
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success(`Added ${usd(cents)} to ${pool.name}`);
     await loadPools();
     await loadDetail(pool.id);
   }
 
-  async function patchMember(memberId: string, patch: Record<string, unknown>) {
+  async function patchMember(memberId: string, patch: MemberPatch) {
     const { error } = await supabase.from("pool_members").update(patch).eq("id", memberId);
     if (error) return toast.error(error.message);
     if (activeId) loadDetail(activeId);
@@ -395,7 +407,7 @@ function MemberTable({
   members: PoolMemberRow[];
   isOwner: boolean;
   uid: string | null;
-  onPatch: (id: string, patch: Record<string, unknown>) => void;
+  onPatch: (id: string, patch: MemberPatch) => void;
   onRemove: (id: string) => void;
 }) {
   if (members.length === 0) {
@@ -442,7 +454,7 @@ function MemberTable({
                 onBlur={(e) => {
                   const raw = e.target.value.trim();
                   const next = raw === "" ? null : parseDollars(raw);
-                  if (raw !== "" && next == null) return toast.error("Enter a valid amount");
+                  if (raw !== "" && next == null) { toast.error("Enter a valid amount"); return; }
                   if (next !== m.spend_limit_cents) onPatch(m.id, { spend_limit_cents: next });
                 }}
               />

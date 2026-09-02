@@ -61,7 +61,7 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Link to="/auth" className="rounded-md px-3 py-1.5 text-sm hover:bg-secondary">
+              <Link to="/auth" search={{ mode: "signin" }} className="rounded-md px-3 py-1.5 text-sm hover:bg-secondary">
                 Sign in
               </Link>
               <Link
