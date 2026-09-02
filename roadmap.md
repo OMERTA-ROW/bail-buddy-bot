@@ -1,0 +1,30 @@
+# Postbail Roadmap
+
+## Shipped
+- Landing page, email auth, profiles
+- Inmate watchlist (add / track / status timeline)
+- Bondsman directory + bondsman signup
+- Status event history
+
+## In progress
+- **Multi-account + payment layers** (requested 2026-09-02)
+  - Account holders: individual logins, profiles, own watchlists — already exists, extending
+  - Main funding account: shared pool with balance, contributions, payout history
+  - Personal debit card: per-holder backup payment method (tokenized, no raw PAN stored)
+  - Payment method management: add / remove / set default; pool owner controls draw permission + per-holder spending limits
+
+## Next up
+- **Call-in activation number** (requested 2026-07-19, not yet built)
+  - Per-account activation PIN + per-inmate activation code
+  - Phase 1: in-app activation (no telephony dependency)
+  - Phase 2: Twilio IVR / SMS number so a holder can activate from the jail lobby by phone
+- Real jail roster data (VINELink partnership, per-county scrapers)
+- SMS/email alerts on status change (Twilio or GatewayAPI connector)
+
+## Compliance guardrails (do not violate)
+- Postbail is **not** a bail agency and **not** a money transmitter.
+- The funding pool is an **earmarked ledger**, not custodial money. Disbursements are
+  authorizations routed to a state-licensed bail agent — the app never posts bond directly.
+- **Never store raw card numbers.** Payment methods hold processor tokens + brand/last4 only.
+- Commercial bail is prohibited in IL, KY, OR, WI — referral and payout must stay disabled there.
+- Fallback to a holder's personal card requires that holder's explicit, recorded consent.
