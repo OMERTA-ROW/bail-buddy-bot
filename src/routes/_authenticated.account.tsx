@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { usd, usdPrecise, parseDollars } from "@/lib/money";
 import { listPoolMembers, addPoolMemberByEmail, type PoolMemberRow } from "@/lib/pool.functions";
+import { exportCardData, type CardRow } from "@/lib/activation.functions";
+import { ActivationPanel } from "@/components/activation-panel";
 
 export const Route = createFileRoute("/_authenticated/account")({
   component: AccountPage,
@@ -22,6 +24,7 @@ type Pool = {
   owner_id: string;
   balance_cents: number;
   allow_card_fallback: boolean;
+  call_in_number: string | null;
 };
 
 type Contribution = {
@@ -75,7 +78,7 @@ function AccountPage() {
 
     const { data, error } = await supabase
       .from("funding_pools")
-      .select("id, name, owner_id, balance_cents, allow_card_fallback")
+      .select("id, name, owner_id, balance_cents, allow_card_fallback, call_in_number")
       .order("created_at", { ascending: true });
     if (error) toast.error(error.message);
     const rows = (data ?? []) as Pool[];
@@ -236,6 +239,24 @@ function AccountPage() {
           </p>
         )}
       </section>
+
+      <section>
+        <h2 className="mb-4 font-serif text-2xl">Activation & wallet card</h2>
+        <ActivationPanel />
+      </section>
+
+      {isOwner && (
+        <section className="grid gap-10 md:grid-cols-2">
+          <CallInSettings
+            poolId={pool.id}
+            current={pool.call_in_number}
+            onSaved={loadPools}
+          />
+          <CardExport poolId={pool.id} />
+        </section>
+      )}
+
+
 
       <div className="grid gap-10 md:grid-cols-2">
         <section>
@@ -527,5 +548,139 @@ function FieldStyles() {
       .pm-input:focus { border-color: var(--color-primary); }
       .pm-input:disabled { opacity:.55; }
     `}</style>
+  );
+}
+
+function CallInSettings({
+  poolId,
+  current,
+  onSaved,
+}: {
+  poolId: string;
+  current: string | null;
+  onSaved: () => void | Promise<void>;
+}) {
+  const [value, setValue] = useState(current ?? "");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => { setValue(current ?? ""); }, [current]);
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    const { error } = await supabase
+      .from("funding_pools")
+      .update({ call_in_number: value.trim() || null })
+      .eq("id", poolId);
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    toast.success("Call-in number saved");
+    await onSaved();
+  }
+
+  return (
+    <div className="panel p-6">
+      <p className="eyebrow mb-2">Call-in activation line</p>
+      <p className="text-xs text-muted-foreground">
+        The number printed on every wallet card. Holders call it, enter their PIN, and tracking turns on.
+        Set it once the line is provisioned.
+      </p>
+      <form onSubmit={save} className="mt-4 flex gap-2">
+        <input
+          className="field"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="+1 (555) 010-4400"
+        />
+        <button disabled={busy} className="btn-primary">
+          {busy ? "Saving…" : "Save"}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function CardExport({ poolId }: { poolId: string }) {
+  const runExport = useServerFn(exportCardData);
+  const [rows, setRows] = useState<CardRow[] | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function load() {
+    setBusy(true);
+    try {
+      const data = await runExport({ data: { poolId } });
+      setRows(data);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not build the export");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function downloadCsv() {
+    if (!rows?.length) return;
+    const header = ["holder_name", "email", "activation_code", "pin", "call_in_number", "tracking_active"];
+    const csv = [
+      header.join(","),
+      ...rows.map((r) =>
+        [r.holder_name ?? "", r.email ?? "", r.activation_code, r.pin, r.call_in_number ?? "", r.tracking_active]
+          .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+          .join(","),
+      ),
+    ].join("\n");
+    const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `postbail-cards-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  return (
+    <div className="panel p-6">
+      <p className="eyebrow mb-2">Card printing export</p>
+      <p className="text-xs text-muted-foreground">
+        Name, activation code, PIN, and call-in number for every holder on this account — the data a card
+        printer needs. Treat the file as confidential.
+      </p>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <button onClick={load} disabled={busy} className="btn-quiet">
+          {busy ? "Building…" : "Build export"}
+        </button>
+        {rows?.length ? (
+          <button onClick={downloadCsv} className="btn-primary">
+            Download CSV ({rows.length})
+          </button>
+        ) : null}
+      </div>
+
+      {rows && rows.length > 0 && (
+        <div className="mt-5 overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="text-muted-foreground">
+              <tr>
+                <th className="py-2 pr-4 font-normal">Holder</th>
+                <th className="py-2 pr-4 font-normal">Code</th>
+                <th className="py-2 pr-4 font-normal">PIN</th>
+                <th className="py-2 font-normal">Call-in</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.user_id} className="border-t border-border">
+                  <td className="py-2 pr-4">{r.holder_name ?? r.email ?? "Holder"}</td>
+                  <td className="py-2 pr-4 font-mono">{r.activation_code}</td>
+                  <td className="py-2 pr-4 font-mono">{r.pin}</td>
+                  <td className="py-2">{r.call_in_number ?? "—"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {rows && rows.length === 0 && (
+        <p className="mt-4 text-xs text-muted-foreground">No holders on this account yet.</p>
+      )}
+    </div>
   );
 }

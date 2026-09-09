@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { US_STATES, NO_COMMERCIAL_BAIL } from "@/lib/us-states";
 import { CosignerBadge } from "@/components/status-badges";
+import { ActivationPanel } from "@/components/activation-panel";
 
 
 type Inmate = {
@@ -121,6 +122,14 @@ function Dashboard() {
           ))}
         </div>
       )}
+
+      <section className="mt-16">
+        <div className="mb-5">
+          <p className="eyebrow mb-2">Activation</p>
+          <h2 className="text-3xl">Tracking activation & wallet card</h2>
+        </div>
+        <ActivationPanel />
+      </section>
 
       <CosignerSummary />
 
