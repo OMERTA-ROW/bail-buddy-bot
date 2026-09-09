@@ -237,6 +237,24 @@ function AccountPage() {
         )}
       </section>
 
+      <section>
+        <h2 className="mb-4 font-serif text-2xl">Activation & wallet card</h2>
+        <ActivationPanel />
+      </section>
+
+      {isOwner && (
+        <section className="grid gap-10 md:grid-cols-2">
+          <CallInSettings
+            poolId={pool.id}
+            current={pool.call_in_number}
+            onSaved={loadPools}
+          />
+          <CardExport poolId={pool.id} />
+        </section>
+      )}
+
+
+
       <div className="grid gap-10 md:grid-cols-2">
         <section>
           <h2 className="mb-4 font-serif text-2xl">Contributions</h2>
