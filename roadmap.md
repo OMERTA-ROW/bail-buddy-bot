@@ -21,6 +21,14 @@
     simulation until DOCUSIGN_* secrets are added
   - Documents-on-file view with per-document status and timestamps — shipped
 
+- **Card & phone activation** (requested 2026-09-09)
+  - Unique 10-char activation code + 6-digit phone PIN per holder, generated on signup, regenerable
+  - Wallet-card data + owner-only CSV export for a card printing vendor
+  - `POST /api/public/activate-by-phone` accepts a PIN (JSON or Twilio form post, TwiML optional)
+    and flips tracking active; protect with PHONE_ACTIVATION_SECRET once a line is provisioned
+  - Tracking status, activation method, and timestamped activation log on the dashboard
+  - Call-in number configurable by the funding account owner
+
 ## Next up
 - **Call-in activation number** (requested 2026-07-19, not yet built)
   - Per-account activation PIN + per-inmate activation code
