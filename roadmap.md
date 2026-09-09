@@ -13,6 +13,14 @@
   - Personal debit card: per-holder backup payment method (tokenized, no raw PAN stored)
   - Payment method management: add / remove / set default; pool owner controls draw permission + per-holder spending limits
 
+- **Cosigners & documents** (requested 2026-09-09)
+  - Cosigner intake (identity, address history, employer, relationship, gov ID upload) — shipped
+  - Release custody plan per case, required before bond submission — shipped
+  - Invite cosigner by email/SMS (record kept; real sending pending Twilio/email provider)
+  - DocuSign e-signature layer: indemnity, bond application, disclosure — shipped, runs in
+    simulation until DOCUSIGN_* secrets are added
+  - Documents-on-file view with per-document status and timestamps — shipped
+
 ## Next up
 - **Call-in activation number** (requested 2026-07-19, not yet built)
   - Per-account activation PIN + per-inmate activation code
