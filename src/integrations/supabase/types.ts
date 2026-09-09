@@ -71,6 +71,86 @@ export type Database = {
         }
         Relationships: []
       }
+      cosigners: {
+        Row: {
+          address_city: string | null
+          address_state: string | null
+          address_street: string | null
+          address_zip: string | null
+          created_at: string
+          date_of_birth: string | null
+          email: string | null
+          employer_name: string | null
+          employer_phone: string | null
+          full_name: string
+          id: string
+          id_document_path: string | null
+          inmate_id: string | null
+          invite_channel: string | null
+          invite_sent_at: string | null
+          phone: string | null
+          relationship: string | null
+          status: Database["public"]["Enums"]["cosigner_status"]
+          updated_at: string
+          user_id: string
+          years_at_address: number | null
+        }
+        Insert: {
+          address_city?: string | null
+          address_state?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          employer_name?: string | null
+          employer_phone?: string | null
+          full_name: string
+          id?: string
+          id_document_path?: string | null
+          inmate_id?: string | null
+          invite_channel?: string | null
+          invite_sent_at?: string | null
+          phone?: string | null
+          relationship?: string | null
+          status?: Database["public"]["Enums"]["cosigner_status"]
+          updated_at?: string
+          user_id: string
+          years_at_address?: number | null
+        }
+        Update: {
+          address_city?: string | null
+          address_state?: string | null
+          address_street?: string | null
+          address_zip?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          employer_name?: string | null
+          employer_phone?: string | null
+          full_name?: string
+          id?: string
+          id_document_path?: string | null
+          inmate_id?: string | null
+          invite_channel?: string | null
+          invite_sent_at?: string | null
+          phone?: string | null
+          relationship?: string | null
+          status?: Database["public"]["Enums"]["cosigner_status"]
+          updated_at?: string
+          user_id?: string
+          years_at_address?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cosigners_inmate_id_fkey"
+            columns: ["inmate_id"]
+            isOneToOne: false
+            referencedRelation: "tracked_inmates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       disbursements: {
         Row: {
           amount_cents: number
@@ -332,6 +412,140 @@ export type Database = {
         }
         Relationships: []
       }
+      release_plans: {
+        Row: {
+          address_city: string
+          address_state: string
+          address_street: string
+          address_zip: string
+          created_at: string
+          id: string
+          inmate_id: string
+          notes: string | null
+          phone: string | null
+          relationship: string | null
+          released_to_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address_city: string
+          address_state: string
+          address_street: string
+          address_zip: string
+          created_at?: string
+          id?: string
+          inmate_id: string
+          notes?: string | null
+          phone?: string | null
+          relationship?: string | null
+          released_to_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address_city?: string
+          address_state?: string
+          address_street?: string
+          address_zip?: string
+          created_at?: string
+          id?: string
+          inmate_id?: string
+          notes?: string | null
+          phone?: string | null
+          relationship?: string | null
+          released_to_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "release_plans_inmate_id_fkey"
+            columns: ["inmate_id"]
+            isOneToOne: true
+            referencedRelation: "tracked_inmates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      signature_documents: {
+        Row: {
+          cosigner_id: string | null
+          created_at: string
+          decline_reason: string | null
+          declined_at: string | null
+          doc_type: Database["public"]["Enums"]["signature_doc_type"]
+          envelope_id: string | null
+          id: string
+          inmate_id: string | null
+          provider: string
+          recipient_email: string | null
+          recipient_name: string | null
+          sent_at: string | null
+          signed_at: string | null
+          signed_document_url: string | null
+          status: Database["public"]["Enums"]["signature_doc_status"]
+          updated_at: string
+          user_id: string
+          viewed_at: string | null
+        }
+        Insert: {
+          cosigner_id?: string | null
+          created_at?: string
+          decline_reason?: string | null
+          declined_at?: string | null
+          doc_type: Database["public"]["Enums"]["signature_doc_type"]
+          envelope_id?: string | null
+          id?: string
+          inmate_id?: string | null
+          provider?: string
+          recipient_email?: string | null
+          recipient_name?: string | null
+          sent_at?: string | null
+          signed_at?: string | null
+          signed_document_url?: string | null
+          status?: Database["public"]["Enums"]["signature_doc_status"]
+          updated_at?: string
+          user_id: string
+          viewed_at?: string | null
+        }
+        Update: {
+          cosigner_id?: string | null
+          created_at?: string
+          decline_reason?: string | null
+          declined_at?: string | null
+          doc_type?: Database["public"]["Enums"]["signature_doc_type"]
+          envelope_id?: string | null
+          id?: string
+          inmate_id?: string | null
+          provider?: string
+          recipient_email?: string | null
+          recipient_name?: string | null
+          sent_at?: string | null
+          signed_at?: string | null
+          signed_document_url?: string | null
+          status?: Database["public"]["Enums"]["signature_doc_status"]
+          updated_at?: string
+          user_id?: string
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "signature_documents_cosigner_id_fkey"
+            columns: ["cosigner_id"]
+            isOneToOne: false
+            referencedRelation: "cosigners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "signature_documents_inmate_id_fkey"
+            columns: ["inmate_id"]
+            isOneToOne: false
+            referencedRelation: "tracked_inmates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       status_events: {
         Row: {
           bond_amount_cents: number | null
@@ -458,6 +672,11 @@ export type Database = {
       }
     }
     Enums: {
+      cosigner_status:
+        | "invited"
+        | "documents_pending"
+        | "signature_pending"
+        | "verified"
       inmate_status:
         | "searching"
         | "in_custody"
@@ -475,6 +694,17 @@ export type Database = {
         | "failed"
         | "cancelled"
       pool_role: "owner" | "member"
+      signature_doc_status:
+        | "draft"
+        | "sent"
+        | "viewed"
+        | "signed"
+        | "declined"
+        | "voided"
+      signature_doc_type:
+        | "cosigner_indemnity"
+        | "bond_application"
+        | "disclosure_of_terms"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -602,6 +832,12 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      cosigner_status: [
+        "invited",
+        "documents_pending",
+        "signature_pending",
+        "verified",
+      ],
       inmate_status: [
         "searching",
         "in_custody",
@@ -621,6 +857,19 @@ export const Constants = {
         "cancelled",
       ],
       pool_role: ["owner", "member"],
+      signature_doc_status: [
+        "draft",
+        "sent",
+        "viewed",
+        "signed",
+        "declined",
+        "voided",
+      ],
+      signature_doc_type: [
+        "cosigner_indemnity",
+        "bond_application",
+        "disclosure_of_terms",
+      ],
     },
   },
 } as const

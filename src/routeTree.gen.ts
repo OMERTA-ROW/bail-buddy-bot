@@ -15,7 +15,9 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedPaymentMethodsRouteImport } from './routes/_authenticated.payment-methods'
+import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated.documents'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
+import { Route as AuthenticatedCosignersRouteImport } from './routes/_authenticated.cosigners'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated.account'
 import { Route as AuthenticatedInmateIdRouteImport } from './routes/_authenticated.inmate.$id'
 
@@ -49,9 +51,19 @@ const AuthenticatedPaymentMethodsRoute =
     path: '/payment-methods',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedCosignersRoute = AuthenticatedCosignersRouteImport.update({
+  id: '/cosigners',
+  path: '/cosigners',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
@@ -71,7 +83,9 @@ export interface FileRoutesByFullPath {
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/cosigners': typeof AuthenticatedCosignersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/documents': typeof AuthenticatedDocumentsRoute
   '/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/inmate/$id': typeof AuthenticatedInmateIdRoute
 }
@@ -81,7 +95,9 @@ export interface FileRoutesByTo {
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/cosigners': typeof AuthenticatedCosignersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/documents': typeof AuthenticatedDocumentsRoute
   '/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/inmate/$id': typeof AuthenticatedInmateIdRoute
 }
@@ -93,7 +109,9 @@ export interface FileRoutesById {
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/cosigners': typeof AuthenticatedCosignersRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/_authenticated/inmate/$id': typeof AuthenticatedInmateIdRoute
 }
@@ -105,7 +123,9 @@ export interface FileRouteTypes {
     | '/bondsmen'
     | '/join-bondsman'
     | '/account'
+    | '/cosigners'
     | '/dashboard'
+    | '/documents'
     | '/payment-methods'
     | '/inmate/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -115,7 +135,9 @@ export interface FileRouteTypes {
     | '/bondsmen'
     | '/join-bondsman'
     | '/account'
+    | '/cosigners'
     | '/dashboard'
+    | '/documents'
     | '/payment-methods'
     | '/inmate/$id'
   id:
@@ -126,7 +148,9 @@ export interface FileRouteTypes {
     | '/bondsmen'
     | '/join-bondsman'
     | '/_authenticated/account'
+    | '/_authenticated/cosigners'
     | '/_authenticated/dashboard'
+    | '/_authenticated/documents'
     | '/_authenticated/payment-methods'
     | '/_authenticated/inmate/$id'
   fileRoutesById: FileRoutesById
@@ -183,11 +207,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPaymentMethodsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/documents': {
+      id: '/_authenticated/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/cosigners': {
+      id: '/_authenticated/cosigners'
+      path: '/cosigners'
+      fullPath: '/cosigners'
+      preLoaderRoute: typeof AuthenticatedCosignersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/account': {
@@ -209,14 +247,18 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedCosignersRoute: typeof AuthenticatedCosignersRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedPaymentMethodsRoute: typeof AuthenticatedPaymentMethodsRoute
   AuthenticatedInmateIdRoute: typeof AuthenticatedInmateIdRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedCosignersRoute: AuthenticatedCosignersRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedPaymentMethodsRoute: AuthenticatedPaymentMethodsRoute,
   AuthenticatedInmateIdRoute: AuthenticatedInmateIdRoute,
 }

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { US_STATES, NO_COMMERCIAL_BAIL } from "@/lib/us-states";
+import { CosignerBadge } from "@/components/status-badges";
+
 
 type Inmate = {
   id: string;
@@ -120,10 +122,59 @@ function Dashboard() {
         </div>
       )}
 
+      <CosignerSummary />
+
       {showAdd && <AddDialog onClose={() => setShowAdd(false)} onSaved={() => { setShowAdd(false); load(); }} />}
     </div>
   );
 }
+
+type CosignerLite = { id: string; full_name: string; status: string; relationship: string | null };
+
+function CosignerSummary() {
+  const [rows, setRows] = useState<CosignerLite[]>([]);
+
+  useEffect(() => {
+    supabase
+      .from("cosigners")
+      .select("id, full_name, status, relationship")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setRows((data ?? []) as CosignerLite[]));
+  }, []);
+
+  return (
+    <section className="mt-16">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="eyebrow mb-2">Paperwork</p>
+          <h2 className="text-3xl">Cosigners</h2>
+        </div>
+        <Link to="/cosigners" className="btn-quiet">
+          Manage cosigners & release custody
+        </Link>
+      </div>
+
+      {rows.length === 0 ? (
+        <div className="panel mt-5 p-8 text-sm text-muted-foreground">
+          No cosigners yet. A bond needs at least one cosigner and a release custody address.
+        </div>
+      ) : (
+        <div className="mt-5 space-y-2">
+          {rows.map((c) => (
+            <div key={c.id} className="panel flex flex-wrap items-center justify-between gap-3 p-4">
+              <div>
+                <p className="font-serif text-lg">{c.full_name}</p>
+                <p className="text-xs text-muted-foreground">{c.relationship || "Relationship not set"}</p>
+              </div>
+              <CosignerBadge status={c.status} />
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 
 function EmptyState({ onAdd }: { onAdd: () => void }) {
   return (
