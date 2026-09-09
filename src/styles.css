@@ -141,3 +141,53 @@
   background: currentColor;
   box-shadow: 0 0 0 3px color-mix(in oklch, currentColor 20%, transparent);
 }
+
+@utility panel {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+@utility field {
+  width: 100%;
+  border: 1px solid var(--color-input);
+  background: color-mix(in oklch, var(--color-card) 70%, black);
+  color: var(--color-foreground);
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+@utility btn-quiet {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-foreground);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+@utility modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 0.85);
+  padding: 1rem;
+}
