@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      activation_events: {
+        Row: {
+          created_at: string
+          detail: string | null
+          event_type: string
+          id: string
+          method: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          detail?: string | null
+          event_type: string
+          id?: string
+          method?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          detail?: string | null
+          event_type?: string
+          id?: string
+          method?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bondsmen: {
         Row: {
           agency_name: string
@@ -229,6 +256,7 @@ export type Database = {
         Row: {
           allow_card_fallback: boolean
           balance_cents: number
+          call_in_number: string | null
           created_at: string
           currency: string
           id: string
@@ -239,6 +267,7 @@ export type Database = {
         Insert: {
           allow_card_fallback?: boolean
           balance_cents?: number
+          call_in_number?: string | null
           created_at?: string
           currency?: string
           id?: string
@@ -249,12 +278,52 @@ export type Database = {
         Update: {
           allow_card_fallback?: boolean
           balance_cents?: number
+          call_in_number?: string | null
           created_at?: string
           currency?: string
           id?: string
           name?: string
           owner_id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      holder_activations: {
+        Row: {
+          activated_at: string | null
+          activated_via: string | null
+          activation_code: string
+          card_printed_at: string | null
+          created_at: string
+          deactivated_at: string | null
+          pin: string
+          tracking_active: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activated_at?: string | null
+          activated_via?: string | null
+          activation_code: string
+          card_printed_at?: string | null
+          created_at?: string
+          deactivated_at?: string | null
+          pin: string
+          tracking_active?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activated_at?: string | null
+          activated_via?: string | null
+          activation_code?: string
+          card_printed_at?: string | null
+          created_at?: string
+          deactivated_at?: string | null
+          pin?: string
+          tracking_active?: boolean
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -654,10 +723,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_tracking_by_pin: {
+        Args: { _caller?: string; _pin: string }
+        Returns: Json
+      }
       contribute_to_pool: {
         Args: { _amount_cents: number; _note?: string; _pool_id: string }
         Returns: string
       }
+      ensure_holder_activation: {
+        Args: { _user_id: string }
+        Returns: undefined
+      }
+      gen_activation_code: { Args: never; Returns: string }
+      gen_activation_pin: { Args: never; Returns: string }
       is_pool_member: {
         Args: { _pool_id: string; _user_id: string }
         Returns: boolean
@@ -666,9 +745,51 @@ export type Database = {
         Args: { _pool_id: string; _user_id: string }
         Returns: boolean
       }
+      regenerate_activation_code: {
+        Args: never
+        Returns: {
+          activated_at: string | null
+          activated_via: string | null
+          activation_code: string
+          card_printed_at: string | null
+          created_at: string
+          deactivated_at: string | null
+          pin: string
+          tracking_active: boolean
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "holder_activations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       request_disbursement: {
         Args: { _amount_cents: number; _inmate_id: string }
         Returns: string
+      }
+      set_tracking_active: {
+        Args: { _active: boolean }
+        Returns: {
+          activated_at: string | null
+          activated_via: string | null
+          activation_code: string
+          card_printed_at: string | null
+          created_at: string
+          deactivated_at: string | null
+          pin: string
+          tracking_active: boolean
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "holder_activations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
