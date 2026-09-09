@@ -132,13 +132,14 @@ function DocRow({ doc, onChanged }: { doc: Doc; onChanged: () => void }) {
   async function mark(status: "viewed" | "signed" | "declined") {
     setBusy(true);
     const now = new Date().toISOString();
-    const patch: Record<string, unknown> = { status };
-    if (status === "viewed") patch["viewed_at"] = now;
-    if (status === "signed") {
-      patch["signed_at"] = now;
-      patch["signed_document_url"] = `simulated://envelope/${doc.envelope_id}`;
-    }
-    if (status === "declined") patch["declined_at"] = now;
+    const patch = {
+      status,
+      ...(status === "viewed" ? { viewed_at: now } : {}),
+      ...(status === "signed"
+        ? { signed_at: now, signed_document_url: `simulated://envelope/${doc.envelope_id}` }
+        : {}),
+      ...(status === "declined" ? { declined_at: now } : {}),
+    };
     const { error } = await supabase.from("signature_documents").update(patch).eq("id", doc.id);
     setBusy(false);
     if (error) return toast.error(error.message);

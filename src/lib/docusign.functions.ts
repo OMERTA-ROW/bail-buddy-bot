@@ -140,10 +140,12 @@ export const refreshSignatureStatus = createServerFn({ method: "POST" })
     const raw = await getEnvelopeStatus(cfg, doc.envelope_id);
     const status = mapEnvelopeStatus(raw);
     const now = new Date().toISOString();
-    const patch: Record<string, unknown> = { status };
-    if (status === "viewed") patch["viewed_at"] = now;
-    if (status === "signed") patch["signed_at"] = now;
-    if (status === "declined") patch["declined_at"] = now;
+    const patch = {
+      status,
+      ...(status === "viewed" ? { viewed_at: now } : {}),
+      ...(status === "signed" ? { signed_at: now } : {}),
+      ...(status === "declined" ? { declined_at: now } : {}),
+    };
 
     const { error: upErr } = await supabase
       .from("signature_documents")

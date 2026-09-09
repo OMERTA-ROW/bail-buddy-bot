@@ -163,8 +163,10 @@ export async function getEnvelopeStatus(
   return json.status;
 }
 
+export type SigStatus = "sent" | "viewed" | "signed" | "declined" | "voided";
+
 /** Maps DocuSign envelope status onto our signature_doc_status enum. */
-export function mapEnvelopeStatus(status: string): string {
+export function mapEnvelopeStatus(status: string): SigStatus {
   switch (status.toLowerCase()) {
     case "sent":
     case "created":
