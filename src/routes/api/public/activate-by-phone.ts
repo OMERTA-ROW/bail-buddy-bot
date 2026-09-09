@@ -70,7 +70,7 @@ export const Route = createFileRoute("/api/public/activate-by-phone")({
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { data, error } = await supabaseAdmin.rpc("activate_tracking_by_pin", {
           _pin: parsed.data.pin,
-          _caller: parsed.data.from ?? null,
+          _caller: parsed.data.from,
         });
 
         if (error) {
