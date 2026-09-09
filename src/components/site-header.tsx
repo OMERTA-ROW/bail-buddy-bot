@@ -34,12 +34,19 @@ export function SiteHeader() {
               <Link to="/dashboard" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
                 Dashboard
               </Link>
+              <Link to="/cosigners" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
+                Cosigners
+              </Link>
+              <Link to="/documents" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
+                Documents
+              </Link>
               <Link to="/account" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
                 Funding account
               </Link>
               <Link to="/payment-methods" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
                 Payment methods
               </Link>
+
             </>
           ) : null}
         </nav>
