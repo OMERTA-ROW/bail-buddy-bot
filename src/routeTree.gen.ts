@@ -19,6 +19,7 @@ import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authentica
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedCosignersRouteImport } from './routes/_authenticated.cosigners'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated.account'
+import { Route as ApiPublicActivateByPhoneRouteImport } from './routes/api/public/activate-by-phone'
 import { Route as AuthenticatedInmateIdRouteImport } from './routes/_authenticated.inmate.$id'
 
 const JoinBondsmanRoute = JoinBondsmanRouteImport.update({
@@ -71,6 +72,12 @@ const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   path: '/account',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const ApiPublicActivateByPhoneRoute =
+  ApiPublicActivateByPhoneRouteImport.update({
+    id: '/api/public/activate-by-phone',
+    path: '/api/public/activate-by-phone',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedInmateIdRoute = AuthenticatedInmateIdRouteImport.update({
   id: '/inmate/$id',
   path: '/inmate/$id',
@@ -88,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/inmate/$id': typeof AuthenticatedInmateIdRoute
+  '/api/public/activate-by-phone': typeof ApiPublicActivateByPhoneRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -100,6 +108,7 @@ export interface FileRoutesByTo {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/inmate/$id': typeof AuthenticatedInmateIdRoute
+  '/api/public/activate-by-phone': typeof ApiPublicActivateByPhoneRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -114,6 +123,7 @@ export interface FileRoutesById {
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/_authenticated/inmate/$id': typeof AuthenticatedInmateIdRoute
+  '/api/public/activate-by-phone': typeof ApiPublicActivateByPhoneRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/documents'
     | '/payment-methods'
     | '/inmate/$id'
+    | '/api/public/activate-by-phone'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/documents'
     | '/payment-methods'
     | '/inmate/$id'
+    | '/api/public/activate-by-phone'
   id:
     | '__root__'
     | '/'
@@ -153,6 +165,7 @@ export interface FileRouteTypes {
     | '/_authenticated/documents'
     | '/_authenticated/payment-methods'
     | '/_authenticated/inmate/$id'
+    | '/api/public/activate-by-phone'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -161,6 +174,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BondsmenRoute: typeof BondsmenRoute
   JoinBondsmanRoute: typeof JoinBondsmanRoute
+  ApiPublicActivateByPhoneRoute: typeof ApiPublicActivateByPhoneRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -235,6 +249,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/activate-by-phone': {
+      id: '/api/public/activate-by-phone'
+      path: '/api/public/activate-by-phone'
+      fullPath: '/api/public/activate-by-phone'
+      preLoaderRoute: typeof ApiPublicActivateByPhoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/inmate/$id': {
       id: '/_authenticated/inmate/$id'
       path: '/inmate/$id'
@@ -273,6 +294,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BondsmenRoute: BondsmenRoute,
   JoinBondsmanRoute: JoinBondsmanRoute,
+  ApiPublicActivateByPhoneRoute: ApiPublicActivateByPhoneRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
