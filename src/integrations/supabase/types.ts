@@ -98,6 +98,60 @@ export type Database = {
         }
         Relationships: []
       }
+      card_fulfillment_requests: {
+        Row: {
+          address_city: string
+          address_country: string
+          address_state: string
+          address_street: string
+          address_street2: string | null
+          address_zip: string
+          created_at: string
+          id: string
+          note: string | null
+          recipient_name: string
+          shipped_at: string | null
+          status: Database["public"]["Enums"]["card_fulfillment_status"]
+          tracking_reference: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address_city: string
+          address_country?: string
+          address_state: string
+          address_street: string
+          address_street2?: string | null
+          address_zip: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          recipient_name: string
+          shipped_at?: string | null
+          status?: Database["public"]["Enums"]["card_fulfillment_status"]
+          tracking_reference?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address_city?: string
+          address_country?: string
+          address_state?: string
+          address_street?: string
+          address_street2?: string | null
+          address_zip?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          recipient_name?: string
+          shipped_at?: string | null
+          status?: Database["public"]["Enums"]["card_fulfillment_status"]
+          tracking_reference?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       cosigners: {
         Row: {
           address_city: string | null
@@ -724,7 +778,7 @@ export type Database = {
     }
     Functions: {
       activate_tracking_by_pin: {
-        Args: { _caller?: string; _pin: string }
+        Args: { _activation_code?: string; _caller?: string; _pin: string }
         Returns: Json
       }
       contribute_to_pool: {
@@ -793,6 +847,12 @@ export type Database = {
       }
     }
     Enums: {
+      card_fulfillment_status:
+        | "requested"
+        | "printing"
+        | "shipped"
+        | "delivered"
+        | "cancelled"
       cosigner_status:
         | "invited"
         | "documents_pending"
@@ -953,6 +1013,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      card_fulfillment_status: [
+        "requested",
+        "printing",
+        "shipped",
+        "delivered",
+        "cancelled",
+      ],
       cosigner_status: [
         "invited",
         "documents_pending",
