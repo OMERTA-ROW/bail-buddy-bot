@@ -21,6 +21,7 @@ import { Route as AuthenticatedCosignersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedCardRouteImport } from './routes/_authenticated.card'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated.account'
 import { Route as ApiPublicActivateByPhoneRouteImport } from './routes/api/public/activate-by-phone'
+import { Route as ApiPublicActivateByCardRouteImport } from './routes/api/public/activate-by-card'
 import { Route as AuthenticatedInmateIdRouteImport } from './routes/_authenticated.inmate.$id'
 
 const JoinBondsmanRoute = JoinBondsmanRouteImport.update({
@@ -84,6 +85,11 @@ const ApiPublicActivateByPhoneRoute =
     path: '/api/public/activate-by-phone',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicActivateByCardRoute = ApiPublicActivateByCardRouteImport.update({
+  id: '/api/public/activate-by-card',
+  path: '/api/public/activate-by-card',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedInmateIdRoute = AuthenticatedInmateIdRouteImport.update({
   id: '/inmate/$id',
   path: '/inmate/$id',
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/inmate/$id': typeof AuthenticatedInmateIdRoute
+  '/api/public/activate-by-card': typeof ApiPublicActivateByCardRoute
   '/api/public/activate-by-phone': typeof ApiPublicActivateByPhoneRoute
 }
 export interface FileRoutesByTo {
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/inmate/$id': typeof AuthenticatedInmateIdRoute
+  '/api/public/activate-by-card': typeof ApiPublicActivateByCardRoute
   '/api/public/activate-by-phone': typeof ApiPublicActivateByPhoneRoute
 }
 export interface FileRoutesById {
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/payment-methods': typeof AuthenticatedPaymentMethodsRoute
   '/_authenticated/inmate/$id': typeof AuthenticatedInmateIdRoute
+  '/api/public/activate-by-card': typeof ApiPublicActivateByCardRoute
   '/api/public/activate-by-phone': typeof ApiPublicActivateByPhoneRoute
 }
 export interface FileRouteTypes {
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/documents'
     | '/payment-methods'
     | '/inmate/$id'
+    | '/api/public/activate-by-card'
     | '/api/public/activate-by-phone'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/documents'
     | '/payment-methods'
     | '/inmate/$id'
+    | '/api/public/activate-by-card'
     | '/api/public/activate-by-phone'
   id:
     | '__root__'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/_authenticated/documents'
     | '/_authenticated/payment-methods'
     | '/_authenticated/inmate/$id'
+    | '/api/public/activate-by-card'
     | '/api/public/activate-by-phone'
   fileRoutesById: FileRoutesById
 }
@@ -186,6 +198,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BondsmenRoute: typeof BondsmenRoute
   JoinBondsmanRoute: typeof JoinBondsmanRoute
+  ApiPublicActivateByCardRoute: typeof ApiPublicActivateByCardRoute
   ApiPublicActivateByPhoneRoute: typeof ApiPublicActivateByPhoneRoute
 }
 
@@ -275,6 +288,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicActivateByPhoneRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/activate-by-card': {
+      id: '/api/public/activate-by-card'
+      path: '/api/public/activate-by-card'
+      fullPath: '/api/public/activate-by-card'
+      preLoaderRoute: typeof ApiPublicActivateByCardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/inmate/$id': {
       id: '/_authenticated/inmate/$id'
       path: '/inmate/$id'
@@ -315,6 +335,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BondsmenRoute: BondsmenRoute,
   JoinBondsmanRoute: JoinBondsmanRoute,
+  ApiPublicActivateByCardRoute: ApiPublicActivateByCardRoute,
   ApiPublicActivateByPhoneRoute: ApiPublicActivateByPhoneRoute,
 }
 export const routeTree = rootRouteImport
