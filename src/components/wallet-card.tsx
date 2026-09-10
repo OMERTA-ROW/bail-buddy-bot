@@ -43,19 +43,16 @@ export function CardFront({
         <span className="eyebrow text-[0.5em]">Activation card</span>
       </div>
 
-      <div className="mt-auto">
-        <p className="eyebrow text-[0.5em]">Call to activate</p>
-        <p className="font-serif text-[1.5em] leading-tight">
-          {data.callInNumber ?? "Number pending"}
-        </p>
-      </div>
-
-      <div className="mt-[0.6em] flex items-end justify-between gap-[0.8em]">
+      <div className="mt-auto flex items-end justify-between gap-[0.8em]">
         <div className="min-w-0">
-          <p className="eyebrow text-[0.5em]">Member</p>
-          <p className="truncate text-[0.78em] leading-snug">{data.holderName}</p>
+          <p className="eyebrow text-[0.5em]">Call to activate</p>
+          <p className="font-serif text-[1.45em] leading-tight">
+            {data.callInNumber ?? "Number pending"}
+          </p>
+          <p className="eyebrow mt-[0.7em] text-[0.5em]">Member</p>
+          <p className="truncate text-[0.72em] leading-snug">{data.holderName}</p>
           <p className="eyebrow mt-[0.5em] text-[0.5em]">Activation code</p>
-          <p className="font-mono text-[0.9em] tracking-[0.18em]">{data.activationCode}</p>
+          <p className="font-mono text-[0.85em] tracking-[0.16em]">{data.activationCode}</p>
         </div>
         {qr && (
           <img
