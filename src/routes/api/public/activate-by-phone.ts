@@ -16,6 +16,7 @@ import { z } from "zod";
 const bodySchema = z.object({
   pin: z.string().regex(/^\d{4,8}$/, "PIN must be 4-8 digits"),
   from: z.string().max(32).optional(),
+  code: z.string().trim().max(24).optional(),
 });
 
 function twiml(message: string) {
