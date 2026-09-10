@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as JoinBondsmanRouteImport } from './routes/join-bondsman'
+import { Route as CardqaRouteImport } from './routes/cardqa'
 import { Route as BondsmenRouteImport } from './routes/bondsmen'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ActivateRouteImport } from './routes/activate'
@@ -28,6 +29,11 @@ import { Route as AuthenticatedInmateIdRouteImport } from './routes/_authenticat
 const JoinBondsmanRoute = JoinBondsmanRouteImport.update({
   id: '/join-bondsman',
   path: '/join-bondsman',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CardqaRoute = CardqaRouteImport.update({
+  id: '/cardqa',
+  path: '/cardqa',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BondsmenRoute = BondsmenRouteImport.update({
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/activate': typeof ActivateRoute
   '/auth': typeof AuthRoute
   '/bondsmen': typeof BondsmenRoute
+  '/cardqa': typeof CardqaRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/account': typeof AuthenticatedAccountRoute
   '/card': typeof AuthenticatedCardRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/activate': typeof ActivateRoute
   '/auth': typeof AuthRoute
   '/bondsmen': typeof BondsmenRoute
+  '/cardqa': typeof CardqaRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/account': typeof AuthenticatedAccountRoute
   '/card': typeof AuthenticatedCardRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/activate': typeof ActivateRoute
   '/auth': typeof AuthRoute
   '/bondsmen': typeof BondsmenRoute
+  '/cardqa': typeof CardqaRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/card': typeof AuthenticatedCardRoute
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/activate'
     | '/auth'
     | '/bondsmen'
+    | '/cardqa'
     | '/join-bondsman'
     | '/account'
     | '/card'
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
     | '/activate'
     | '/auth'
     | '/bondsmen'
+    | '/cardqa'
     | '/join-bondsman'
     | '/account'
     | '/card'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/activate'
     | '/auth'
     | '/bondsmen'
+    | '/cardqa'
     | '/join-bondsman'
     | '/_authenticated/account'
     | '/_authenticated/card'
@@ -210,6 +222,7 @@ export interface RootRouteChildren {
   ActivateRoute: typeof ActivateRoute
   AuthRoute: typeof AuthRoute
   BondsmenRoute: typeof BondsmenRoute
+  CardqaRoute: typeof CardqaRoute
   JoinBondsmanRoute: typeof JoinBondsmanRoute
   ApiPublicActivateByCardRoute: typeof ApiPublicActivateByCardRoute
   ApiPublicActivateByPhoneRoute: typeof ApiPublicActivateByPhoneRoute
@@ -222,6 +235,13 @@ declare module '@tanstack/react-router' {
       path: '/join-bondsman'
       fullPath: '/join-bondsman'
       preLoaderRoute: typeof JoinBondsmanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cardqa': {
+      id: '/cardqa'
+      path: '/cardqa'
+      fullPath: '/cardqa'
+      preLoaderRoute: typeof CardqaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bondsmen': {
@@ -355,6 +375,7 @@ const rootRouteChildren: RootRouteChildren = {
   ActivateRoute: ActivateRoute,
   AuthRoute: AuthRoute,
   BondsmenRoute: BondsmenRoute,
+  CardqaRoute: CardqaRoute,
   JoinBondsmanRoute: JoinBondsmanRoute,
   ApiPublicActivateByCardRoute: ApiPublicActivateByCardRoute,
   ApiPublicActivateByPhoneRoute: ApiPublicActivateByPhoneRoute,
