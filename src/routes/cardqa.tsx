@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { FlipCard } from "@/components/wallet-card";
 
-export const Route = createFileRoute("/__cardqa")({ component: QA });
+export const Route = createFileRoute("/cardqa")({ component: QA });
 
 function QA() {
   return (
