@@ -191,3 +191,80 @@
   background: rgb(0 0 0 / 0.85);
   padding: 1rem;
 }
+
+/* ---------- Wallet activation card ---------- */
+
+.wallet-card-shell {
+  width: 100%;
+  max-width: 27rem;
+  aspect-ratio: 3.375 / 2.125;
+  perspective: 1400px;
+  cursor: pointer;
+  container-type: inline-size;
+}
+
+.wallet-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  font-size: 3.7cqw;
+}
+
+.wallet-card-inner.is-flipped { transform: rotateY(180deg); }
+
+.wallet-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.55);
+  border-radius: 0.5em;
+}
+
+.wallet-card-face-back { transform: rotateY(180deg); }
+
+.print-sheet { display: none; }
+
+.print-card {
+  position: relative;
+  width: 3.375in;
+  height: 2.125in;
+  container-type: inline-size;
+  font-size: 3.7cqw;
+}
+
+.print-card .crop {
+  position: absolute;
+  width: 0.18in;
+  height: 0.18in;
+  border-color: #000;
+  border-style: solid;
+  border-width: 0;
+}
+.print-card .crop-tl { top: -0.22in; left: -0.22in; border-top-width: 1px; border-left-width: 1px; }
+.print-card .crop-tr { top: -0.22in; right: -0.22in; border-top-width: 1px; border-right-width: 1px; }
+.print-card .crop-bl { bottom: -0.22in; left: -0.22in; border-bottom-width: 1px; border-left-width: 1px; }
+.print-card .crop-br { bottom: -0.22in; right: -0.22in; border-bottom-width: 1px; border-right-width: 1px; }
+
+@media print {
+  @page { margin: 0.45in; }
+  body * { visibility: hidden !important; }
+  .print-sheet, .print-sheet * { visibility: visible !important; }
+  .print-sheet {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .print-card { margin: 0.3in 0 0.7in 0.3in; break-inside: avoid; }
+  .print-face, .print-face * {
+    color: #111 !important;
+    border-color: #9a9a9a !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .print-face { background: #ffffff !important; }
+  .print-face img { background: #ffffff !important; }
+}
