@@ -16,6 +16,7 @@ import { z } from "zod";
 const bodySchema = z.object({
   pin: z.string().regex(/^\d{4,8}$/, "PIN must be 4-8 digits"),
   from: z.string().max(32).optional(),
+  code: z.string().trim().max(24).optional(),
 });
 
 function twiml(message: string) {
@@ -43,17 +44,26 @@ export const Route = createFileRoute("/api/public/activate-by-phone")({
           }
         }
 
-        let raw: { pin?: string; from?: string } = {};
+        let raw: { pin?: string; from?: string; code?: string } = {};
         const contentType = request.headers.get("content-type") ?? "";
         try {
           if (contentType.includes("application/json")) {
             const json = (await request.json()) as Record<string, unknown>;
-            raw = { pin: String(json["pin"] ?? ""), from: json["from"] as string | undefined };
+            raw = {
+              pin: String(json["pin"] ?? ""),
+              from: json["from"] as string | undefined,
+              code: (json["code"] ?? json["activation_code"]) as string | undefined,
+            };
           } else {
             const form = await request.formData();
+            // Twilio <Gather> posts keypad entry as Digits; a two-step IVR can
+            // pass the card's activation code through as ActivationCode/code.
             raw = {
               pin: String(form.get("Digits") ?? form.get("pin") ?? ""),
               from: (form.get("From") ?? form.get("from") ?? undefined) as string | undefined,
+              code: (form.get("ActivationCode") ?? form.get("code") ?? undefined) as
+                | string
+                | undefined,
             };
           }
         } catch {
@@ -71,6 +81,7 @@ export const Route = createFileRoute("/api/public/activate-by-phone")({
         const { data, error } = await supabaseAdmin.rpc("activate_tracking_by_pin", {
           _pin: parsed.data.pin,
           _caller: parsed.data.from,
+          _activation_code: parsed.data.code,
         });
 
         if (error) {

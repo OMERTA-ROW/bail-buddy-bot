@@ -34,6 +34,9 @@ export function SiteHeader() {
               <Link to="/dashboard" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
                 Dashboard
               </Link>
+              <Link to="/card" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
+                My card
+              </Link>
               <Link to="/cosigners" className="text-muted-foreground hover:text-foreground [&.active]:text-foreground">
                 Cosigners
               </Link>
