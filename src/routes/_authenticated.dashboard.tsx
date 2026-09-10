@@ -124,9 +124,14 @@ function Dashboard() {
       )}
 
       <section className="mt-16">
-        <div className="mb-5">
-          <p className="eyebrow mb-2">Activation</p>
-          <h2 className="text-3xl">Tracking activation & wallet card</h2>
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="eyebrow mb-2">Activation</p>
+            <h2 className="text-3xl">Tracking activation & wallet card</h2>
+          </div>
+          <Link to="/card" className="btn-quiet">
+            View my card
+          </Link>
         </div>
         <ActivationPanel />
       </section>
