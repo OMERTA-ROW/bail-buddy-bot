@@ -14,7 +14,7 @@ export function useCardQr(url: string, dark = "#000000", light = "#ffffff") {
     let alive = true;
     QRCode.toDataURL(url, { margin: 0, width: 320, color: { dark, light } })
       .then((d) => { if (alive) setSrc(d); })
-      .catch(() => { if (alive) setSrc(null); });
+      .catch((err) => { console.error("[qr]", err); if (alive) setSrc(null); });
     return () => { alive = false; };
   }, [url, dark, light]);
   return src;
