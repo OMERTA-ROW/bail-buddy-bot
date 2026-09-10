@@ -81,6 +81,7 @@ export const Route = createFileRoute("/api/public/activate-by-phone")({
         const { data, error } = await supabaseAdmin.rpc("activate_tracking_by_pin", {
           _pin: parsed.data.pin,
           _caller: parsed.data.from,
+          _activation_code: parsed.data.code,
         });
 
         if (error) {
