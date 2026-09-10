@@ -18,6 +18,7 @@ import { Route as AuthenticatedPaymentMethodsRouteImport } from './routes/_authe
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated.documents'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedCosignersRouteImport } from './routes/_authenticated.cosigners'
+import { Route as AuthenticatedCardRouteImport } from './routes/_authenticated.card'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated.account'
 import { Route as ApiPublicActivateByPhoneRouteImport } from './routes/api/public/activate-by-phone'
 import { Route as AuthenticatedInmateIdRouteImport } from './routes/_authenticated.inmate.$id'
@@ -67,6 +68,11 @@ const AuthenticatedCosignersRoute = AuthenticatedCosignersRouteImport.update({
   path: '/cosigners',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCardRoute = AuthenticatedCardRouteImport.update({
+  id: '/card',
+  path: '/card',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/card': typeof AuthenticatedCardRoute
   '/cosigners': typeof AuthenticatedCosignersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/account': typeof AuthenticatedAccountRoute
+  '/card': typeof AuthenticatedCardRoute
   '/cosigners': typeof AuthenticatedCosignersRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/bondsmen': typeof BondsmenRoute
   '/join-bondsman': typeof JoinBondsmanRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/card': typeof AuthenticatedCardRoute
   '/_authenticated/cosigners': typeof AuthenticatedCosignersRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/bondsmen'
     | '/join-bondsman'
     | '/account'
+    | '/card'
     | '/cosigners'
     | '/dashboard'
     | '/documents'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/bondsmen'
     | '/join-bondsman'
     | '/account'
+    | '/card'
     | '/cosigners'
     | '/dashboard'
     | '/documents'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/bondsmen'
     | '/join-bondsman'
     | '/_authenticated/account'
+    | '/_authenticated/card'
     | '/_authenticated/cosigners'
     | '/_authenticated/dashboard'
     | '/_authenticated/documents'
@@ -242,6 +254,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCosignersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/card': {
+      id: '/_authenticated/card'
+      path: '/card'
+      fullPath: '/card'
+      preLoaderRoute: typeof AuthenticatedCardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/account': {
       id: '/_authenticated/account'
       path: '/account'
@@ -268,6 +287,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedCardRoute: typeof AuthenticatedCardRoute
   AuthenticatedCosignersRoute: typeof AuthenticatedCosignersRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
@@ -277,6 +297,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedCardRoute: AuthenticatedCardRoute,
   AuthenticatedCosignersRoute: AuthenticatedCosignersRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
