@@ -152,6 +152,63 @@ export type Database = {
         }
         Relationships: []
       }
+      card_payments: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          currency: string
+          fulfillment_request_id: string | null
+          id: string
+          kind: string
+          payment_method_id: string | null
+          processor: string
+          receipt_reference: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          fulfillment_request_id?: string | null
+          id?: string
+          kind: string
+          payment_method_id?: string | null
+          processor?: string
+          receipt_reference?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          fulfillment_request_id?: string | null
+          id?: string
+          kind?: string
+          payment_method_id?: string | null
+          processor?: string
+          receipt_reference?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "card_payments_fulfillment_request_id_fkey"
+            columns: ["fulfillment_request_id"]
+            isOneToOne: false
+            referencedRelation: "card_fulfillment_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "card_payments_payment_method_id_fkey"
+            columns: ["payment_method_id"]
+            isOneToOne: false
+            referencedRelation: "payment_methods"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cosigners: {
         Row: {
           address_city: string | null
