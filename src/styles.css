@@ -231,8 +231,9 @@
   position: relative;
   width: 3.375in;
   height: 2.125in;
-  container-type: inline-size;
-  font-size: 3.7cqw;
+  /* cqw on the container element itself resolves against the viewport, so the
+     fixed-size print card uses an absolute base size: 3.7% of 3.375in. */
+  font-size: 0.125in;
 }
 
 .print-card .crop {
