@@ -298,7 +298,9 @@ function CardActions({
   );
 }
 
-function PhysicalCardSection({ defaultName }: { defaultName: string }) {
+function PhysicalCardSection({ defaultName, paidTick }: { defaultName: string; paidTick: number }) {
+  const { paidFor } = useCardPayments(paidTick);
+  const physicalPaid = paidFor("physical");
   const [rows, setRows] = useState<Fulfillment[]>([]);
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -328,6 +330,7 @@ function PhysicalCardSection({ defaultName }: { defaultName: string }) {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    if (!physicalPaid) { toast.error("Pay the $2 card fee first — choose the mailed plastic card option above."); return; }
     setBusy(true);
     const { data: userRes } = await supabase.auth.getUser();
     const uid = userRes.user?.id;
