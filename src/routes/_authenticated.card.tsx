@@ -372,7 +372,13 @@ function PhysicalCardSection({ defaultName, paidTick }: { defaultName: string; p
             Have a printed plastic card mailed to you.
           </p>
         </div>
-        <button className="btn-quiet" onClick={() => setOpen((v) => !v)}>
+        <button
+          className="btn-quiet"
+          onClick={() => {
+            if (!physicalPaid) return toast.info("Pay the $2 card fee above first — choose the mailed plastic card option.");
+            setOpen((v) => !v);
+          }}
+        >
           {open ? "Cancel" : "Request physical card"}
         </button>
       </div>
