@@ -50,6 +50,7 @@ const FULFILLMENT_LABEL: Record<string, string> = {
 function MyCardPage() {
   const { activation, callInNumber, loading } = useActivation();
   const [holderName, setHolderName] = useState("Member");
+  const [paidTick, setPaidTick] = useState(0);
   const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
@@ -97,8 +98,9 @@ function MyCardPage() {
         </div>
 
         <div className="space-y-4">
-          <CardActions data={data} email={email} pin={activation?.pin ?? ""} />
-          <PhysicalCardSection defaultName={holderName} />
+          <CardCheckout email={email} onPaid={() => setPaidTick((t) => t + 1)} />
+          <CardActions data={data} email={email} pin={activation?.pin ?? ""} paidTick={paidTick} />
+          <PhysicalCardSection defaultName={holderName} paidTick={paidTick} />
         </div>
       </div>
 
