@@ -28,6 +28,9 @@
     and flips tracking active; protect with PHONE_ACTIVATION_SECRET once a line is provisioned
   - Tracking status, activation method, and timestamped activation log on the dashboard
   - Call-in number configurable by the funding account owner
+  - Wallet card page (print/flip/QR) + physical-card fulfillment requests — shipped
+  - $2 card fee (memorability by design) gating print/email/mail options, with receipt —
+    shipped, simulated until Lovable Payments is enabled; confirmation email pending sending domain
 
 ## Next up
 - **Call-in activation number** (requested 2026-07-19, not yet built)
