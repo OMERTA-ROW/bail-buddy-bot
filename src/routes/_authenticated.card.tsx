@@ -109,35 +109,176 @@ function MyCardPage() {
   );
 }
 
+const CARD_PRICE_CENTS = 200;
+
+type CardPayment = {
+  id: string;
+  kind: "print" | "email" | "physical";
+  amount_cents: number;
+  status: string;
+  receipt_reference: string;
+  created_at: string;
+};
+
+function useCardPayments(paidTick: number) {
+  const [payments, setPayments] = useState<CardPayment[]>([]);
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from("card_payments")
+        .select("id, kind, amount_cents, status, receipt_reference, created_at")
+        .eq("status", "paid")
+        .order("created_at", { ascending: false });
+      setPayments((data ?? []) as CardPayment[]);
+      setLoaded(true);
+    })();
+  }, [paidTick]);
+  const paidFor = (kind: CardPayment["kind"]) => payments.some((p) => p.kind === kind);
+  return { payments, loaded, paidFor };
+}
+
+const PURPOSE_COPY =
+  "This card costs $2. We charge for it on purpose — paying for it makes you remember you have it. Keep it in your wallet. If you are ever detained, this card is how you activate your bond.";
+
+function CardCheckout({ email, onPaid }: { email: string | null; onPaid: () => void }) {
+  const [kind, setKind] = useState<CardPayment["kind"]>("print");
+  const [busy, setBusy] = useState(false);
+  const [receipt, setReceipt] = useState<CardPayment | null>(null);
+  const [defaultMethod, setDefaultMethod] = useState<{ brand: string; last4: string } | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase
+        .from("payment_methods")
+        .select("brand, last4")
+        .eq("is_default", true)
+        .maybeSingle();
+      setDefaultMethod(data ?? null);
+    })();
+  }, []);
+
+  async function pay() {
+    setBusy(true);
+    const { data: userRes } = await supabase.auth.getUser();
+    const uid = userRes.user?.id;
+    if (!uid) { toast.error("Please sign in again"); setBusy(false); return; }
+
+    const { data: method } = await supabase
+      .from("payment_methods")
+      .select("id")
+      .eq("is_default", true)
+      .maybeSingle();
+
+    const { data, error } = await supabase
+      .from("card_payments")
+      .insert({
+        user_id: uid,
+        kind,
+        amount_cents: CARD_PRICE_CENTS,
+        payment_method_id: method?.id ?? null,
+      })
+      .select("id, kind, amount_cents, status, receipt_reference, created_at")
+      .single();
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    setReceipt(data as CardPayment);
+    onPaid();
+  }
+
+  return (
+    <div className="panel p-6">
+      <p className="eyebrow mb-2">Card fee — $2</p>
+      <p className="text-sm leading-relaxed text-foreground/90">{PURPOSE_COPY}</p>
+
+      {receipt ? (
+        <div className="mt-5 rounded-md border border-signal/40 bg-signal/10 p-4 text-sm">
+          <p className="font-medium text-foreground">Paid — your card is unlocked.</p>
+          <p className="mt-1 text-muted-foreground">
+            Receipt {receipt.receipt_reference} · $2.00 ·{" "}
+            {new Date(receipt.created_at).toLocaleString()}
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Remember: you paid for this card so you would not forget it. It is how you activate
+            your bond if you are detained.
+            {email
+              ? " A confirmation email will follow once your sending domain is connected."
+              : ""}
+          </p>
+        </div>
+      ) : (
+        <div className="mt-5 space-y-3">
+          <div className="flex flex-wrap gap-2">
+            {(["print", "email", "physical"] as const).map((k) => (
+              <button
+                key={k}
+                onClick={() => setKind(k)}
+                className={kind === k ? "btn-primary" : "btn-quiet"}
+              >
+                {k === "print" ? "Print at home" : k === "email" ? "Emailed card" : "Mailed plastic card"}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {defaultMethod
+              ? `Charged to your default card, ${defaultMethod.brand} •••• ${defaultMethod.last4}.`
+              : "No card on file yet — the $2 is recorded now and charged to your default card once a payment processor is connected."}
+          </p>
+          <button className="btn-primary" disabled={busy} onClick={pay}>
+            {busy ? "Processing…" : "Pay $2 and continue"}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CardActions({
   data,
   email,
   pin,
+  paidTick,
 }: {
   data: WalletCardData;
   email: string | null;
   pin: string;
+  paidTick: number;
 }) {
+  const { paidFor, loaded } = useCardPayments(paidTick);
+  const unlocked = paidFor("print") || paidFor("email");
+
   return (
     <div className="panel p-6">
       <p className="eyebrow mb-4">Keep a copy</p>
       <div className="flex flex-wrap gap-3">
-        <button className="btn-primary" onClick={() => window.print()}>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            if (!unlocked) return toast.info("Pay the $2 card fee above first — it is what makes the card stick in your memory.");
+            window.print();
+          }}
+        >
           Print card
         </button>
         <button
           className="btn-quiet"
-          onClick={() =>
+          onClick={() => {
+            if (!unlocked) return toast.info("Pay the $2 card fee above first.");
             toast.info(
               email
                 ? `Emailing to ${email} needs your own sending domain connected first.`
                 : "Add an email address to your account first.",
-            )
-          }
+            );
+          }}
         >
           Email me my card
         </button>
       </div>
+      {loaded && !unlocked && (
+        <p className="mt-3 text-xs text-muted-foreground">
+          These options unlock after the $2 card fee above.
+        </p>
+      )}
       <p className="mt-4 text-xs text-muted-foreground">
         Printing gives you a page at exact wallet-card size with cut marks — front and back, ready
         to trim. Your 6-digit phone PIN ({pin ? "kept off the card on purpose" : "not set"}) is
