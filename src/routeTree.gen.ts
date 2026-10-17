@@ -9,41 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as JoinBondsmanRouteImport } from './routes/join-bondsman'
-import { Route as CardqaRouteImport } from './routes/cardqa'
-import { Route as BondsmenRouteImport } from './routes/bondsmen'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as ActivateRouteImport } from './routes/activate'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedPaymentMethodsRouteImport } from './routes/_authenticated.payment-methods'
-import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated.documents'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
-import { Route as AuthenticatedCosignersRouteImport } from './routes/_authenticated.cosigners'
-import { Route as AuthenticatedCardRouteImport } from './routes/_authenticated.card'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as ActivateRouteImport } from './routes/activate'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BondsmenRouteImport } from './routes/bondsmen'
+import { Route as CardqaRouteImport } from './routes/cardqa'
+import { Route as JoinBondsmanRouteImport } from './routes/join-bondsman'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated.account'
-import { Route as ApiPublicActivateByPhoneRouteImport } from './routes/api/public/activate-by-phone'
-import { Route as ApiPublicActivateByCardRouteImport } from './routes/api/public/activate-by-card'
+import { Route as AuthenticatedCardRouteImport } from './routes/_authenticated.card'
+import { Route as AuthenticatedCosignersRouteImport } from './routes/_authenticated.cosigners'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
+import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated.documents'
+import { Route as AuthenticatedPaymentMethodsRouteImport } from './routes/_authenticated.payment-methods'
 import { Route as AuthenticatedInmateIdRouteImport } from './routes/_authenticated.inmate.$id'
+import { Route as ApiPublicActivateByCardRouteImport } from './routes/api/public/activate-by-card'
+import { Route as ApiPublicActivateByPhoneRouteImport } from './routes/api/public/activate-by-phone'
 
-const JoinBondsmanRoute = JoinBondsmanRouteImport.update({
-  id: '/join-bondsman',
-  path: '/join-bondsman',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CardqaRoute = CardqaRouteImport.update({
-  id: '/cardqa',
-  path: '/cardqa',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BondsmenRoute = BondsmenRouteImport.update({
-  id: '/bondsmen',
-  path: '/bondsmen',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ActivateRoute = ActivateRouteImport.update({
@@ -51,34 +40,29 @@ const ActivateRoute = ActivateRouteImport.update({
   path: '/activate',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BondsmenRoute = BondsmenRouteImport.update({
+  id: '/bondsmen',
+  path: '/bondsmen',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPaymentMethodsRoute =
-  AuthenticatedPaymentMethodsRouteImport.update({
-    id: '/payment-methods',
-    path: '/payment-methods',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
-  id: '/documents',
-  path: '/documents',
-  getParentRoute: () => AuthenticatedRoute,
+const CardqaRoute = CardqaRouteImport.update({
+  id: '/cardqa',
+  path: '/cardqa',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRoute,
+const JoinBondsmanRoute = JoinBondsmanRouteImport.update({
+  id: '/join-bondsman',
+  path: '/join-bondsman',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedCosignersRoute = AuthenticatedCosignersRouteImport.update({
-  id: '/cosigners',
-  path: '/cosigners',
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedCardRoute = AuthenticatedCardRouteImport.update({
@@ -86,10 +70,36 @@ const AuthenticatedCardRoute = AuthenticatedCardRouteImport.update({
   path: '/card',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
-  id: '/account',
-  path: '/account',
+const AuthenticatedCosignersRoute = AuthenticatedCosignersRouteImport.update({
+  id: '/cosigners',
+  path: '/cosigners',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedPaymentMethodsRoute =
+  AuthenticatedPaymentMethodsRouteImport.update({
+    id: '/payment-methods',
+    path: '/payment-methods',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedInmateIdRoute = AuthenticatedInmateIdRouteImport.update({
+  id: '/inmate/$id',
+  path: '/inmate/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ApiPublicActivateByCardRoute = ApiPublicActivateByCardRouteImport.update({
+  id: '/api/public/activate-by-card',
+  path: '/api/public/activate-by-card',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicActivateByPhoneRoute =
   ApiPublicActivateByPhoneRouteImport.update({
@@ -97,16 +107,6 @@ const ApiPublicActivateByPhoneRoute =
     path: '/api/public/activate-by-phone',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiPublicActivateByCardRoute = ApiPublicActivateByCardRouteImport.update({
-  id: '/api/public/activate-by-card',
-  path: '/api/public/activate-by-card',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedInmateIdRoute = AuthenticatedInmateIdRouteImport.update({
-  id: '/inmate/$id',
-  path: '/inmate/$id',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -230,39 +230,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/join-bondsman': {
-      id: '/join-bondsman'
-      path: '/join-bondsman'
-      fullPath: '/join-bondsman'
-      preLoaderRoute: typeof JoinBondsmanRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cardqa': {
-      id: '/cardqa'
-      path: '/cardqa'
-      fullPath: '/cardqa'
-      preLoaderRoute: typeof CardqaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bondsmen': {
-      id: '/bondsmen'
-      path: '/bondsmen'
-      fullPath: '/bondsmen'
-      preLoaderRoute: typeof BondsmenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/activate': {
-      id: '/activate'
-      path: '/activate'
-      fullPath: '/activate'
-      preLoaderRoute: typeof ActivateRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -272,39 +244,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/activate': {
+      id: '/activate'
+      path: '/activate'
+      fullPath: '/activate'
+      preLoaderRoute: typeof ActivateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/payment-methods': {
-      id: '/_authenticated/payment-methods'
-      path: '/payment-methods'
-      fullPath: '/payment-methods'
-      preLoaderRoute: typeof AuthenticatedPaymentMethodsRouteImport
-      parentRoute: typeof AuthenticatedRoute
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/documents': {
-      id: '/_authenticated/documents'
-      path: '/documents'
-      fullPath: '/documents'
-      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
-      parentRoute: typeof AuthenticatedRoute
+    '/bondsmen': {
+      id: '/bondsmen'
+      path: '/bondsmen'
+      fullPath: '/bondsmen'
+      preLoaderRoute: typeof BondsmenRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRoute
+    '/cardqa': {
+      id: '/cardqa'
+      path: '/cardqa'
+      fullPath: '/cardqa'
+      preLoaderRoute: typeof CardqaRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/cosigners': {
-      id: '/_authenticated/cosigners'
-      path: '/cosigners'
-      fullPath: '/cosigners'
-      preLoaderRoute: typeof AuthenticatedCosignersRouteImport
+    '/join-bondsman': {
+      id: '/join-bondsman'
+      path: '/join-bondsman'
+      fullPath: '/join-bondsman'
+      preLoaderRoute: typeof JoinBondsmanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/card': {
@@ -314,19 +293,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/account': {
-      id: '/_authenticated/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+    '/_authenticated/cosigners': {
+      id: '/_authenticated/cosigners'
+      path: '/cosigners'
+      fullPath: '/cosigners'
+      preLoaderRoute: typeof AuthenticatedCosignersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/api/public/activate-by-phone': {
-      id: '/api/public/activate-by-phone'
-      path: '/api/public/activate-by-phone'
-      fullPath: '/api/public/activate-by-phone'
-      preLoaderRoute: typeof ApiPublicActivateByPhoneRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/documents': {
+      id: '/_authenticated/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/payment-methods': {
+      id: '/_authenticated/payment-methods'
+      path: '/payment-methods'
+      fullPath: '/payment-methods'
+      preLoaderRoute: typeof AuthenticatedPaymentMethodsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/inmate/$id': {
+      id: '/_authenticated/inmate/$id'
+      path: '/inmate/$id'
+      fullPath: '/inmate/$id'
+      preLoaderRoute: typeof AuthenticatedInmateIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/api/public/activate-by-card': {
       id: '/api/public/activate-by-card'
@@ -335,12 +335,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicActivateByCardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/inmate/$id': {
-      id: '/_authenticated/inmate/$id'
-      path: '/inmate/$id'
-      fullPath: '/inmate/$id'
-      preLoaderRoute: typeof AuthenticatedInmateIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
+    '/api/public/activate-by-phone': {
+      id: '/api/public/activate-by-phone'
+      path: '/api/public/activate-by-phone'
+      fullPath: '/api/public/activate-by-phone'
+      preLoaderRoute: typeof ApiPublicActivateByPhoneRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
